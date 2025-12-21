@@ -1,1 +1,1 @@
-export { Test } from './components/Test';
+export { default as ErrorPage } from './pages/ErrorPage';
