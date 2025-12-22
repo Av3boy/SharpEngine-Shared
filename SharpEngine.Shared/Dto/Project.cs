@@ -11,6 +11,8 @@ namespace SharpEngine.Shared.Dto;
 /// </summary>
 public class Project
 {
+    public readonly Version EngineVersion;
+
     /// <summary>
     ///     An identifier for the current project within the launcher UI.
     /// </summary>
