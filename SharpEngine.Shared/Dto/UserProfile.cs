@@ -7,16 +7,24 @@ namespace SharpEngine.Shared.Dto;
 /// </summary>
 public class UserProfile
 {
-    public UserId UserId { get; init; }
+    public UserId? UserId { get; init; }
     public string Username { get; init; } = default!;
-    public string Email { get; init; } = default!;
-    public string Auth0Identifier { get; init; }
+    public string? Email { get; init; } = default!;
+    public required string Auth0Identifier { get; init; }
 
     // TODO: What user details do we need from Auth0?
 
-    public List<SocialMedia> LinkedSocialMedia { get; init; } = [];
+    public SocialMedia LinkedSocialMedia { get; init; } = new();
 
-    public List<Project> Projects { get; init; } = [];
+    public IEnumerable<Project> Projects { get; init; } = [];
 
-    public List<Achievement> Achievements { get; init; } = [];
+    public IEnumerable<Achievement> Achievements { get; init; } = [];
+
+    public UserSettings Settings { get; init; } = new();
+
+    public DateTime FirstLogin { get; init; }
+}
+
+public class UserSettings
+{
 }

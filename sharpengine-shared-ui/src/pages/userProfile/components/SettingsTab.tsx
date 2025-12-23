@@ -1,10 +1,13 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useState } from 'react';
 
 export function SettingsTab() {
+  const { user } = useAuth0();
+
   const [subscribeToReleases, setSubscribeToReleases] = useState(true);
   const [subscribeToPreReleases, setSubscribeToPreReleases] = useState(false);
+  const [notifyOnAssetPurchase, setNotifyOnAssetPurchase] = useState(false);
   
-  const userEmail = 'johndoe@example.com';
 
   return (
     <div className="max-w-6xl mx-auto p-8" style={{paddingTop: '0'}}>
@@ -23,8 +26,8 @@ export function SettingsTab() {
           
           <input
             type="email"
-            value={userEmail}
-            readOnly
+            value={user?.email || ''}
+            placeholder='your@email.com'
             className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
           />
           <p className="text-sm text-gray-500 mt-2">
@@ -70,6 +73,23 @@ export function SettingsTab() {
                 </div>
                 <p className="text-sm text-gray-500">
                   Be the first to know about upcoming features and beta releases
+                </p>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={notifyOnAssetPurchase}
+                onChange={(e) => setNotifyOnAssetPurchase(e.target.checked)}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              />
+              <div>
+                <div className="group-hover:text-blue-600 transition-colors">
+                  Notify me when my assets are purchased
+                </div>
+                <p className="text-sm text-gray-500">
+                  Receive an email or in-app notification when someone buys one of your assets
                 </p>
               </div>
             </label>

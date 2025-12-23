@@ -24,6 +24,8 @@ public class Project
     [Required]
     public string? Name { get; set; }
 
+    public string? RepositoryUrl { get; set; }
+
     /// <summary>
     ///     Gets or sets the path to the project file.
     /// </summary>
