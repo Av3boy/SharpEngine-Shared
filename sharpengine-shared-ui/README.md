@@ -1,4 +1,8 @@
-# React + TypeScript + Vite
+<h1 align="center">
+    <a href="#"><img align="center" width="100" src="Resources/icon.svg"></a>
+    SharpEngine Shared UI    
+</h1>
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
