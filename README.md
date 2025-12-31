@@ -1,5 +1,5 @@
 <h1 align="center">
-    <a href="#"><img align="center" width="100" src="Resources/icon.svg"></a>
+    <a href="#"><img align="center" width="100" src="https://github.com/Av3boy/SharpEngine/raw/main/Resources/icon.svg"></a>
     SharpEngine Shared    
 </h1>
 
