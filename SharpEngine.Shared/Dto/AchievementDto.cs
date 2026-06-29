@@ -1,4 +1,4 @@
-﻿using SharpEngine.Shared.Dto.Primitives;
+using SharpEngine.Shared.Dto.Primitives;
 
 namespace SharpEngine.Shared.Dto;
 

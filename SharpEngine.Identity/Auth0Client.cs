@@ -1,11 +1,32 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace SharpEngine.Identity;
 
-public class Auth0Client
+public interface IAuth0Client
 {
+    Task<string?> GetAccessToken();
+}
+
+/// <summary>
+///     Represents a client to handle Auth0 authorization and user authentication.
+/// </summary>
+public class Auth0Client : IAuth0Client
+{
+    private readonly ILogger<Auth0Client> _logger;
+    
+    /// <summary>
+    ///     Initializes a new instance of <see cref="Auth0Client" />.
+    /// </summary>
+    /// <param name="logger">A logger used to write down executed operations.</param>
+    public Auth0Client(ILogger<Auth0Client> logger)
+    {
+        _logger = logger;
+    }
+
+    /// <inheritdoc />
     public async Task<string?> GetAccessToken()
     {
         string domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");

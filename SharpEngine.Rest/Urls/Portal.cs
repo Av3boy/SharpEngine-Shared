@@ -1,4 +1,4 @@
-﻿using SharpEngine.Shared.Dto.Primitives;
+using SharpEngine.Shared.Dto.Primitives;
 
 namespace SharpEngine.Rest.Urls;
 
@@ -13,6 +13,12 @@ public static class Portal
     public const string BaseUrl = "https://portal.sharpengine.com/";
     public const string CreateUser = $"{BaseUrl}users";
 
-    internal static string GetUserAchievements(UserId userId) => throw new NotImplementedException();
     internal static string GetUserById(UserId userId) => throw new NotImplementedException();
+
+    /// <summary>
+    ///     Gets the route to the api that retrievs all the achievements for an user.
+    /// </summary>
+    /// <param name="userid">The ID of the user whose achievements should be found.</param>
+    /// <returns>The route to the api.</returns>
+    public static string GetUserAchievements(UserId userId) => BaseUrl + $"achievements/{userId}";
 }

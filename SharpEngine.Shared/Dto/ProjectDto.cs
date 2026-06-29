@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Launcher.Enums;
 using SharpEngine.Shared.Attributes;
 
 namespace SharpEngine.Shared.Dto;
@@ -21,13 +22,18 @@ public class ProjectDto
     /// </summary>
     public readonly Guid Id = Guid.NewGuid();
 
+    [GridElement(Title = "Engine Version")]
+    public Version EngineVersion { get; init; }
+
     /// <summary>
     ///     Gets or sets the name of the project.
     /// </summary>
     [Required]
+    [GridElement(Title = "Project Name")]
     public string? Name { get; set; }
 
     /// <summary>Gets or sets the URI of the repository where the project is hosted.</summary>
+    [GridElement(Icon = SvgIcon.VersionControl)]
     public string? RepositoryUrl { get; set; }
 
     // TODO: Repository type (e.g., GitHub, GitLab, Bitbucket, etc.)
@@ -43,7 +49,6 @@ public class ProjectDto
     /// </summary>
     [JsonIgnore]
     [DisplayName("Last Modified")]
-    [Filter(false)]
     public DateTime LastModified { get; set; } = DateTime.Now;
 
     /// <summary>

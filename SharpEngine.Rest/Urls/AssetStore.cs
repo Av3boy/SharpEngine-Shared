@@ -1,4 +1,4 @@
-﻿using SharpEngine.Shared.Dto.Primitives;
+using SharpEngine.Shared.Dto.Primitives;
 
 namespace SharpEngine.Rest.Urls;
 
@@ -18,6 +18,7 @@ public static class AssetStore
     /// <remarks>
     ///     Used as a prefix for all API endpoints related to assets, comments, checkout, and other operations in the asset store.
     /// </remarks>
+    // TODO: Figure out a smart way of controlling the versioning.
     public const string Apiv1Route = "api/v1";
 
     /// <summary>
