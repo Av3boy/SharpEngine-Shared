@@ -9,9 +9,12 @@ namespace SharpEngine.Shared.Dto;
 /// <summary>
 ///     Represents a SharpEngine project.
 /// </summary>
-public class Project
+public class ProjectDto
 {
-    public readonly Version EngineVersion;
+    public const string ProjectFileExtension = "sharpproject";
+
+    /// <summary>Gets or sets the version of SharpEngine used by the project.</summary>
+    public Version EngineVersion { get; init; } = new Version(1, 0, 0);
 
     /// <summary>
     ///     An identifier for the current project within the launcher UI.
@@ -24,7 +27,10 @@ public class Project
     [Required]
     public string? Name { get; set; }
 
+    /// <summary>Gets or sets the URI of the repository where the project is hosted.</summary>
     public string? RepositoryUrl { get; set; }
+
+    // TODO: Repository type (e.g., GitHub, GitLab, Bitbucket, etc.)
 
     /// <summary>
     ///     Gets or sets the path to the project file.
@@ -41,14 +47,19 @@ public class Project
     public DateTime LastModified { get; set; } = DateTime.Now;
 
     /// <summary>
+    ///     Gets or sets the list of scene files associated with the project.
+    /// </summary>
+    public List<string> SceneFiles { get; set; } = [];
+
+    /// <summary>
     ///     Loads the given project file.
     /// </summary>
     /// <param name="projectFile">The file containing the project to load.</param>
     /// <returns>The loaded project. If unable to load, <see langword="null" />.</returns>
-    public static Project? LoadProject(string projectFile)
+    public static ProjectDto? LoadProject(string projectFile)
     {
         var json = File.ReadAllText(projectFile);
-        var project = JsonSerializer.Deserialize<Project>(json);
+        var project = JsonSerializer.Deserialize<ProjectDto>(json);
 
         if (project is not null)
             project.LastModified = File.GetLastWriteTime(projectFile);

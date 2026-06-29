@@ -1,15 +1,10 @@
-﻿using SharpEngine.Shared.Dto.Primitives;
-
-namespace SharpEngine.Shared.Dto.AssetStore;
+﻿namespace AssetStore.Api.v1.DTO.Payload;
 
 /// <summary>
-///   Data Transfer Object representing an asset in the asset store.
+///     Represents the payload for creating a new asset in the asset store.
 /// </summary>
-public class AssetDto
+public sealed class CreateAssetPayloadDto
 {
-    /// <summary>Gets or initializes the id of the asset.</summary>
-    public AssetId? Id { get; init; }
-
     /// <summary>Gets or sets the name of the asset.</summary>
     public string Name { get; set; } = string.Empty;
 
@@ -18,32 +13,9 @@ public class AssetDto
 
     /// <summary>Gets or sets the price of the asset in USD.</summary>
     public decimal PriceUsd { get; set; }
-    
-    /// <summary>Gets or initializes the date and time when the asset was created.</summary>
-    public DateTime CreatedAt { get; init; }
-    
-    /// <summary>Gets or initializes the date and time when the asset was last updated.</summary>
-    public DateTime LastUpdatedAt { get; init; }
-    
+
     /// <summary>Gets or sets the keywords associated with the asset.</summary>
     public IReadOnlyList<string> KeyWords { get; set; } = [];
-    
-    /// <summary>Gets or sets the comments made about the asset.</summary>
-    public IReadOnlyList<CommentDto> Comments { get; set; } = [];
-
-    /// <summary>Gets or sets the author user of the asset.</summary>
-    public UserProfileDto? Author { get; init; }
-
-    /// <summary>Gets or initializes the ID of the author user of the asset.</summary>
-    public UserId AuthorId { get; init; }
-
-    /// <summary>
-    ///     Gets or sets whether the asset is tombstoned (soft-deleted). 
-    /// </summary>
-    /// <remarks>
-    ///     Tombstoned assets are not visible to users and are excluded from search results, but they remain in the database for potential recovery or auditing purposes.
-    /// </remarks>
-    public bool Tombstoned { get; set; }
 
     // (e.g., model, texture, sound, etc.)
     // public AssetType

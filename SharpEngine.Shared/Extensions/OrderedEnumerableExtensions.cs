@@ -14,14 +14,14 @@ public static class OrderedEnumerableExtensions
     /// <param name="toFilter">The collection of projects to be filtered and ordered.</param>
     /// <param name="filters">The names of properties and their corresponding filter modes.</param>
     /// <returns>A filtered collection of projects based on the applied filters.</returns>
-    public static IEnumerable<Project> FilterBy(this IEnumerable<Project> toFilter, Dictionary<string, FilterMode> filters)
+    public static IEnumerable<ProjectDto> FilterBy(this IEnumerable<ProjectDto> toFilter, Dictionary<string, FilterMode> filters)
     {
         var stringComparer = new NaturalStringComparer();
-        IOrderedEnumerable<Project>? ordered = null;
+        IOrderedEnumerable<ProjectDto>? ordered = null;
 
         foreach (var filter in filters)
         {
-            string keySelector(Project p) => p.GetPropertyValue(filter.Key)?.ToString() ?? string.Empty;
+            string keySelector(ProjectDto p) => p.GetPropertyValue(filter.Key)?.ToString() ?? string.Empty;
 
             if (ordered == null)
                 ordered = filter.Value == FilterMode.Ascending

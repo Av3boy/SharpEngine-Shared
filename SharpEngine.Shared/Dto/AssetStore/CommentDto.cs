@@ -1,12 +1,10 @@
 ﻿using SharpEngine.Shared.Dto.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpEngine.Shared.Dto.AssetStore;
 
+/// <summary>
+///     Represents a comment made by a user.
+/// </summary>
 public class CommentDto
 {
     /// <summary>
@@ -43,6 +41,18 @@ public class CommentDto
     ///     Gets or initializes the replies to this comment.
     /// </summary>
     public IReadOnlyList<CommentDto> Replies { get; init; } = [];
+
+    /// <summary>
+    ///     Gets or sets the date and time when the comment was last updated.
+    /// </summary>
     public DateTime LastUpdatedAt { get; set; } = DateTime.UtcNow;
-    public Dictionary<int, string> Reactions { get; set; } = [];
+
+    /// <summary>
+    ///     Gets or sets the reactions to this comment.
+    /// </summary>
+    /// <remarks>
+    ///     The key is the reaction type (e.g., like, love, etc.).
+    ///     Value is the amount of reactions of that type.
+    /// </remarks>
+    public ReactionDictionary Reactions { get; set; } = [];
 }
