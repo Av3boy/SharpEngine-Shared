@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SharpEngine.Rest\SharpEngine.Rest.csproj" />
+    <ProjectReference Include="..\SharpEngine.Telemetry\SharpEngine.Telemetry.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 using SharpEngine.Rest.Clients;
 using SharpEngine.Rest.Urls;
 using SharpEngine.Shared.Dto.AssetStore;
+using SharpEngine.Shared.Dto.Primitives;
 
 namespace SharpEngine.Rest.Clients.AssetStore;
 
@@ -21,4 +22,8 @@ public class AssetClient : RestClient, IAssetClient
     /// <inheritdoc />
     public async Task<AssetDto?> GetAssetAsync(Guid assetId, CancellationToken token = default)
         => await GetAsync<AssetDto?>(Urls.AssetStore.GetById(assetId), token);
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<AssetDto>> GetUserAssetsAsync(UserId userId, CancellationToken token = default)
+        => await GetAsync<IEnumerable<AssetDto>>(Urls.AssetStore.GetAllByAuthor(userId), token);
 }

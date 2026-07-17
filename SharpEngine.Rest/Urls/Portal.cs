@@ -11,7 +11,10 @@ public static class Portal
     ///     Gets the base URL for the portal API
     /// </summary>
     public const string BaseUrl = "https://portal.sharpengine.com/";
-    public const string CreateUser = $"{BaseUrl}users";
+
+    public const string ApiBaseUrl = $"{BaseUrl}/api";
+    public const string CreateUser = $"{ApiBaseUrl}/users";
+    public const string EngineVersion = $"{ApiBaseUrl}/engine";
 
     internal static string GetUserById(UserId userId) => throw new NotImplementedException();
 

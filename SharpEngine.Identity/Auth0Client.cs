@@ -1,106 +1,72 @@
 ﻿using System.Net.Http;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using SharpEngine.Rest.Clients;
 
-namespace SharpEngine.Identity;
-
-public interface IAuth0Client
+namespace SharpEngine.Identity
 {
-    Task<string?> GetAccessToken();
-}
-
-/// <summary>
-///     Represents a client to handle Auth0 authorization and user authentication.
-/// </summary>
-public class Auth0Client : IAuth0Client
-{
-    private readonly ILogger<Auth0Client> _logger;
-    
     /// <summary>
-    ///     Initializes a new instance of <see cref="Auth0Client" />.
+    ///     Represents a client to handle Auth0 authorization and user authentication.
     /// </summary>
-    /// <param name="logger">A logger used to write down executed operations.</param>
-    public Auth0Client(ILogger<Auth0Client> logger)
+    /// <remarks>
+    ///     <see href="https://auth0.com/docs/secure/tokens/access-tokens/get-access-tokens" />
+    /// </remarks>
+    public class Auth0Client : RestClient, IAuth0Client
     {
-        _logger = logger;
-    }
+        private readonly ILogger<Auth0Client> _logger;
 
-    /// <inheritdoc />
-    public async Task<string?> GetAccessToken()
-    {
-        string domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
-        string clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
-        string clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
-
-        if (string.IsNullOrWhiteSpace(clientId))
+        /// <summary>
+        ///     Initializes a new instance of <see cref="Auth0Client" />.
+        /// </summary>
+        /// <param name="logger">A logger used to write down executed operations.</param>
+        /// <param name="client">An HTTP client used to make requests.</param>
+        public Auth0Client(ILogger<Auth0Client> logger, HttpClient client) : base(client, logger)
         {
-            Console.Error.WriteLine("Missing required environment variable: AUTH0_CLIENT_ID.");
-            return null;
+            _logger = logger;
         }
 
-        if (string.IsNullOrWhiteSpace(clientSecret))
+        /// <inheritdoc />
+        public async Task<Auth0TokenResponseDto?> GetAccessTokenAsync(CancellationToken token = default)
         {
-            Console.Error.WriteLine("Missing required environment variable: AUTH0_CLIENT_SECRET.");
-            return null;
-        }
+            // TODO: These env variables should be read properly from a configuration file or secret manager, not directly from environment variables.
+            string domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+            string clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
+            string clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
 
-        if (string.IsNullOrWhiteSpace(domain))
-        {
-            Console.Error.WriteLine("Missing required environment variable: AUTH0_DOMAIN.");
-            return null;
-        }
-
-        string audience = $"https://{domain}/api/v2/";
-        var tokenEndpoint = $"https://{domain}/oauth/token";
-
-        using var httpClient = new HttpClient();
-        var payload = new
-        {
-            client_id = clientId,
-            client_secret = clientSecret,
-            audience = audience,
-            grant_type = "client_credentials"
-        };
-
-        var json = JsonSerializer.Serialize(payload);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response;
-        try
-        {
-            response = await httpClient.PostAsync(tokenEndpoint, content).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"HTTP request failed: {ex.Message}");
-            return null;
-        }
-
-        var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            Console.Error.WriteLine($"Token request failed ({(int)response.StatusCode}): {responseText}");
-            return null;
-        }
-
-        try
-        {
-            using var doc = JsonDocument.Parse(responseText);
-            if (doc.RootElement.TryGetProperty("access_token", out var accessToken))
+            // TODO: These should also be validated to ensure they are not null or empty.
+            // Validatation attribute + DTO to hold these as attributes?
+            if (string.IsNullOrWhiteSpace(clientId))
             {
-                Console.WriteLine("Access token acquired.");
-                return accessToken.GetString();
+                _logger.LogError("Missing required environment variable: AUTH0_CLIENT_ID.");
+                return null;
             }
 
-            Console.Error.WriteLine("Token response did not contain an access_token.");
-            return null;
-        }
-        catch (JsonException)
-        {
-            Console.Error.WriteLine("Failed to parse token response JSON.");
-            return null;
+            if (string.IsNullOrWhiteSpace(clientSecret))
+            {
+                _logger.LogError("Missing required environment variable: AUTH0_CLIENT_SECRET.");
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                _logger.LogError("Missing required environment variable: AUTH0_DOMAIN.");
+                return null;
+            }
+
+            string audience = $"https://{domain}/api/v2/";
+            var tokenEndpoint = $"https://{domain}/oauth/token";
+
+            var payload = new Auth0TokenRequestDto()
+            {
+                client_id = clientId,
+                client_secret = clientSecret,
+                audience = audience,
+                grant_type = "client_credentials"
+            };
+
+            return await PostAsync<Auth0TokenResponseDto>(tokenEndpoint, payload, token);
         }
     }
 }

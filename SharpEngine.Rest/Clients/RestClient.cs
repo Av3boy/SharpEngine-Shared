@@ -37,15 +37,23 @@ public abstract class RestClient
     /// <param name="url">The url where the PUT resource should exist.</param>
     /// <param name="content">The content to be sent with the request.</param>
     /// <param name="token">Propagates notification that operations should be canceled.</param>
-    /// <returns>The results of the PUT operation.</returns>
-    public async Task<TResult> PutAsync<TResult, TBody>(string url, TBody content, CancellationToken token = default)
+    /// <returns>The results of the PUT operation; <see langword="null"/> if an error occurred.</returns>
+    public async Task<TResult?> PutAsync<TResult, TBody>(string url, TBody content, CancellationToken token = default)
     {
-        var httpContent = await GetHttpContent(content, token);
-        var response = await _httpClient.PutAsync(url, httpContent, token);
+        try
+        {
+            var httpContent = await GetHttpContent(content, token);
+            var response = await _httpClient.PutAsync(url, httpContent, token);
 
-        response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
 
-        return await DeserializeResultAsync<TResult>(response, token);
+            return await DeserializeResultAsync<TResult>(response, token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while making a PUT request to {Url}", url);
+            return default;
+        }
     }
 
     /// <summary>
@@ -56,27 +64,41 @@ public abstract class RestClient
     /// <returns>The results of the DELETE operation.</returns>
     public async Task DeleteAsync(string url, CancellationToken token = default)
     {
-        var response = await _httpClient.DeleteAsync(url, token);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await _httpClient.DeleteAsync(url, token);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while making a DELETE request to {Url}", url);
+        }
     }
 
     /// <summary>
     ///     Makes an REST API call to the given <paramref name="url"/> address with the HTTP POST method.
     /// </summary>
     /// <typeparam name="TResult">The type of the expected result.</typeparam>
-    /// <typeparam name="TBody">The type of the body contents.</typeparam>
     /// <param name="url">The url where the POST resource should exist.</param>
     /// <param name="content">The content to be sent with the request.</param>
     /// <param name="token">Propagates notification that operations should be canceled.</param>
-    /// <returns>The results of the POST operation.</returns>
-    public async Task<TResult> PostAsync<TResult, TBody>(string url, TBody content, CancellationToken token = default)
+    /// <returns>The results of the POST operation; <see langword="null"/> if an error occurred.</returns>
+    public async Task<TResult?> PostAsync<TResult>(string url, object content, CancellationToken token = default)
     {
-        var httpContent = await GetHttpContent(content, token);
+        try
+        {
+            var httpContent = await GetHttpContent(content, token);
 
-        var response = await _httpClient.PostAsync(url, httpContent, token);
-        response.EnsureSuccessStatusCode();
+            var response = await _httpClient.PostAsync(url, httpContent, token);
+            response.EnsureSuccessStatusCode();
 
-        return await DeserializeResultAsync<TResult>(response, token);
+            return await DeserializeResultAsync<TResult>(response, token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while making a POST request to {Url}", url);
+            return default;
+        }
     }
 
     /// <summary>
@@ -88,10 +110,18 @@ public abstract class RestClient
     /// <returns>The results of the GET operation.</returns>
     public async Task<TResult> GetAsync<TResult>(string url, CancellationToken token = default)
     {
-        var response = await _httpClient.GetAsync(url, token);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await _httpClient.GetAsync(url, token);
+            response.EnsureSuccessStatusCode();
 
-        return await DeserializeResultAsync<TResult>(response, token);
+            return await DeserializeResultAsync<TResult>(response, token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while making a GET request to {Url}", url);
+            return default!;
+        }
     }
 
     private static async Task<StreamContent> GetHttpContent<TBody>(TBody content, CancellationToken token)
@@ -108,22 +138,6 @@ public abstract class RestClient
         var result = await JsonSerializer.DeserializeAsync<TResult>(jsonStream, JsonSerializerOptions.Default, token);
         Debug.Assert(result is not null, "Deserialized result is null.");
 
-        return result;
-    }
-
-    protected async Task<T> PostAsync<T>(string url, object body)
-    {
-        var jsonBody = JsonSerializer.Serialize(body);
-        var content = new StringContent(jsonBody, System.Text.Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync(url, content);
-        
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadAsStringAsync();
-        
-        var result = JsonSerializer.Deserialize<T>(json);
-        Debug.Assert(result is not null, "Deserialized result is null.");
-        
         return result;
     }
 }
