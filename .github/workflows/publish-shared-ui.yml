@@ -1,0 +1,21 @@
+# This workflow is triggered when a new release is published in the SharpEngine-Shared repository.
+# It builds and publishes the sharpengine-shared-ui node package to GitHub Packages.
+
+permissions:
+  contents: read
+  packages: read
+
+steps:
+  - uses: actions/checkout@v4
+
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 22
+      registry-url: https://npm.pkg.github.com
+      scope: '@av3boy'
+
+  - run: npm ci
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  - run: npm run build

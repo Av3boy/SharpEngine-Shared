@@ -7,9 +7,10 @@ export type HeaderLoginProps = {
   isAuthenticated: boolean;
   user?: User;
   useWhiteText?: boolean;
+  className?: string;
 };
 
-export function HeaderLogin({ onProfileClicked, loginWithRedirect, logout, isAuthenticated, user, useWhiteText }: HeaderLoginProps) {
+export function HeaderLogin({ onProfileClicked, loginWithRedirect, logout, isAuthenticated, user, useWhiteText, className }: HeaderLoginProps) {
 
   function loginUser(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault(); 
@@ -25,9 +26,11 @@ export function HeaderLogin({ onProfileClicked, loginWithRedirect, logout, isAut
   const profileBorder = useWhiteText ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)';
   const iconFill = useWhiteText ? '#e3e3e3' : '#333333';
 
+  const rootClassName = className ? ` ${className}` : '';
+
   if (isAuthenticated)
     return (
-      <div className="flex items-center gap-4" style={{ justifyContent: 'space-between', gap: '16px' }}>
+      <div className={`flex items-center gap-4${rootClassName}`} style={{ justifyContent: 'space-between', gap: '16px' }}>
         <button
           className={`${colorClass} transition-colors flex items-center`}
           onClick={(e) => {
@@ -67,7 +70,7 @@ export function HeaderLogin({ onProfileClicked, loginWithRedirect, logout, isAut
 
   return (
     <button
-      className={`${colorClass} transition-colors`}
+      className={`${colorClass} transition-colors${rootClassName}`}
       style={{ alignSelf: 'start', cursor: 'pointer' }}
       onClick={(e) => loginUser(e)}
     >

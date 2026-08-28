@@ -1,7 +1,6 @@
 import { apiRequest, RestClientResult } from "./restClient";
 import { Routes } from "./routes";
-
-import { User } from '@auth0/auth0-spa-js';
+import type { User } from '@auth0/auth0-react';
 
 // Logs out the current user in the BFF (stateless JWT; mostly for symmetry with Auth0 logout).
 export async function Logout(token: string) : Promise<RestClientResult<void>> {

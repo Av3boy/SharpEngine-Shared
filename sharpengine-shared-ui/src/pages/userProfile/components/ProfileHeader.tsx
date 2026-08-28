@@ -1,5 +1,4 @@
-import { useAuth0, User } from '@auth0/auth0-react';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export function ProfileHeader() {
   const { user } = useAuth0();
