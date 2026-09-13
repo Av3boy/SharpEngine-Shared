@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SharpEngine\SharpEngine.Core.Numerics\SharpEngine.Core.Numerics.csproj" />
     <ProjectReference Include="..\SharpEngine.IO\SharpEngine.IO.csproj" />
   </ItemGroup>
 

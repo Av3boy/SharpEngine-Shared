@@ -21,18 +21,18 @@ public class ProjectDto : SaveableFile<ProjectDto>
     public readonly Guid Id = Guid.NewGuid();
 
     /// <summary>Gets or sets the version of SharpEngine used by the project.</summary>
-    [GridElement(Title = "Engine Version")]
+    [GridElement("Engine Version")]
     public EngineVersionDto EngineVersion { get; init; } = new();
 
     /// <summary>
     ///     Gets or sets the name of the project.
     /// </summary>
     [Required]
-    [GridElement(Title = "Project Name")]
+    [GridElement("Project Name")]
     public string? Name { get; set; }
 
     /// <summary>Gets or sets the URI of the repository where the project is hosted.</summary>
-    [GridElement(Icon = SvgIcon.VersionControl)]
+    [GridElement("Repository URL", Icon = SvgIcon.VersionControl)]
     public string? RepositoryUrl { get; set; }
 
     // TODO: Repository type (e.g., GitHub, GitLab, Bitbucket, etc.)

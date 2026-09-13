@@ -29,11 +29,18 @@ public enum SvgIcon
     /// <summary>Indicates the chevron '&lt;' up icon.</summary>
     ChevronUp,
 
+    /// <summary>Indicates the download icon.</summary>
     Download,
 
+    /// <summary>Indicates the asset store icon.</summary>
     AssetStore,
 
+    /// <summary>Indicates the more vertical icon.</summary>
     MoreVertical,
+
+    /// <summary>Indicates the folder open icon.</summary>
     FolderOpen,
+
+    /// <summary>Indicates the version control icon.</summary>
     VersionControl
 }
