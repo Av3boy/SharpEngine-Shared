@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>SharpEngine.IO</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Antti Veikkolainen</Authors>
+    <RepositoryUrl>https://github.com/Av3boy/SharpEngine-Shared</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

@@ -113,3 +113,42 @@ jobs:
       with:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
+
+  publish_nuget:
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build projects
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack packages
+        run: |
+          dotnet pack SharpEngine.Shared\SharpEngine.Shared.csproj -c Release -o artifacts /p:Version=1.0.0-${{ github.run_number }}
+          dotnet pack SharpEngine.IO\SharpEngine.IO.csproj -c Release -o artifacts /p:Version=1.0.0-${{ github.run_number }}
+          dotnet pack SharpEngine.Rest\SharpEngine.Rest.csproj -c Release -o artifacts /p:Version=1.0.0-${{ github.run_number }}
+          dotnet pack SharpEngine.Telemetry\SharpEngine.Telemetry.csproj -c Release -o artifacts /p:Version=1.0.0-${{ github.run_number }}
+
+      - name: Publish to GitHub Packages
+        env:
+          NUGET_API_KEY: ${{ secrets.PUBLISH_NUGET_PACKAGE }}
+        run: |
+          powershell -NoProfile -Command "
+            Get-ChildItem -Path artifacts -Filter *.nupkg | ForEach-Object {
+              dotnet nuget push $_.FullName --source https://nuget.pkg.github.com/Av3boy/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+            }"

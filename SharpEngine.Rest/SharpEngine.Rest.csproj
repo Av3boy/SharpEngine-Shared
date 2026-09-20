@@ -4,6 +4,10 @@
     <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>SharpEngine.Rest</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Antti Veikkolainen</Authors>
+    <RepositoryUrl>https://github.com/Av3boy/SharpEngine-Shared</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
