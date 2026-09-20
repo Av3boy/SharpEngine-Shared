@@ -10,6 +10,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateNuGetPackages>true</GenerateNuGetPackages>
   </PropertyGroup>
 
   <!-- Signing details -->
@@ -18,12 +19,9 @@
     <RepositoryUrl>https://github.com/Av3boy/SharpEngine</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <GenerateNuGetPackages>true</GenerateNuGetPackages>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <PackageOutputPath>$(UserProfile)\.nuget\local</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
